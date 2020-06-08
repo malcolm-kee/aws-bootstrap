@@ -221,8 +221,6 @@ Resources:
 
           yum install -y aws-cfn-bootstrap
 
-          /opt/aws/bin/cfn-init -v --stack ${AWS::StackName} --region ${AWS::Region} --resource Instance
-
           cat > /tmp/install_script.sh << EOF
 
             echo "Setting up NodeJS Environment"
