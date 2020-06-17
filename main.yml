@@ -9,6 +9,9 @@ Parameters:
   CodePipelineBucket:
     Type: String
     Description: 'The S3 Bucket for CodePipeline artifacts.'
+  TextractBucket:
+    Type: String
+    Description: 'The S3 bucket for Textract artifacts.'
   GitHubOwner:
     Type: String
   GitHubRepo:
@@ -192,7 +195,7 @@ Resources:
             Version: 2012-10-17
             Statement:
               - Effect: Allow
-                Action: 's3:*',
+                Action: 's3:*'
                 Resource: '*'
       Tags:
         - Key: Name
@@ -260,6 +263,8 @@ Resources:
             chown ec2-user:ec2-user /tmp/install_script.sh && chmod a+x /tmp/install_script.sh
 
             sleep 1; su - ec2-user -c "/tmp/install_script.sh"
+
+            export TEXTRACT_S3_BUCKET=${TextractBucket}
 
             # Have CloudFormation install any files and packages from metadata
             /opt/aws/bin/cfn-init -v --stack ${AWS::StackName} --region ${AWS::Region} --resource InstanceLaunchTemplate

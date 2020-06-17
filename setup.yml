@@ -4,6 +4,9 @@ Parameters:
   CodePipelineBucket:
     Type: String
     Description: 'The S3 bucket for CodePipeline artifacts.'
+  TextractBucket:
+    Type: String
+    Description: 'The S3 bucket for Textract artifacts.'
 
 Resources:
   CodePipelineS3Bucket:
@@ -11,6 +14,21 @@ Resources:
     DeletionPolicy: Retain
     Properties:
       BucketName: !Ref CodePipelineBucket
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+
+  TextractS3Bucket:
+    Type: AWS::S3::Bucket
+    DeletionPolicy: Retain
+    Properties:
+      BucketName: !Ref TextractBucket
       PublicAccessBlockConfiguration:
         BlockPublicAcls: true
         BlockPublicPolicy: true

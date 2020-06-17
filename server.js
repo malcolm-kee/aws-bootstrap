@@ -19,6 +19,7 @@ const server = http.createServer((req, res) => {
         res.setHeader('Content-Type', 'text/plain');
         res.end(`Hello Cloud ${req.headers["user-agent"]}
         from ${hostname()}
+        Bucket name ${process.env.TEXTRACT_S3_BUCKET}
         Bucket data: ${JSON.stringify(data.Buckets, null, 2)}
         `);
     })
