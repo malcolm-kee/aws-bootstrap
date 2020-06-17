@@ -264,7 +264,6 @@ Resources:
 
             sleep 1; su - ec2-user -c "/tmp/install_script.sh"
 
-            export TEXTRACT_S3_BUCKET=${TextractBucket}
 
             # Have CloudFormation install any files and packages from metadata
             /opt/aws/bin/cfn-init -v --stack ${AWS::StackName} --region ${AWS::Region} --resource InstanceLaunchTemplate
