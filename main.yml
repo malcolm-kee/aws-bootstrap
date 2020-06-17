@@ -187,6 +187,13 @@ Resources:
               - Effect: Allow
                 Action: 'ec2:DescribeTags'
                 Resource: '*'
+        - PolicyName: s3FullAccess
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action: 's3:*',
+                Resource: '*'
       Tags:
         - Key: Name
           Value: !Ref AWS::StackName
