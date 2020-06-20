@@ -434,6 +434,23 @@ Resources:
         - Key: Name
           Value: !Ref AWS::StackName
 
+  AnalysisTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: JobId
+          AttributeType: S
+      KeySchema:
+        - AttributeName: JobId
+          KeyType: HASH
+      TableName: AnalysisTable
+      ProvisionedThroughput:
+        ReadCapacityUnits: 10
+        WriteCapacityUnits: 10
+      Tags:
+        - Key: Name
+          Value: !Ref AWS::StackName
+
 Outputs:
   InstanceEndpoint1:
     Description: The DNS name for the created instance
