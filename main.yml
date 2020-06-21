@@ -22,6 +22,10 @@ Parameters:
   GitHubPersonalAccessToken:
     Type: String
     NoEcho: true
+  LambdaCodeBucket:
+    Type: String
+  LambdaCodeKey:
+    Type: String
 
 Resources:
   SecurityGroup:
@@ -452,10 +456,47 @@ Resources:
         - Key: Name
           Value: !Ref AWS::StackName
 
+  SnsHandlerRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          Effect: Allow
+          Principal:
+            Service:
+              - 'lambda.amazonaws.com'
+          Action: sts:AssumeRole
+      ManagedPolicyArns:
+        # - AWSLambdaBasicExecutionRole
+        # - AWSLambdaDynamoDBExecutionRole
+        - arn:aws:iam::aws:policy/AmazonSNSFullAccess
+      Policies:
+        - PolicyName: s3FullAccess
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action: 's3:*'
+                Resource: '*'
+      Tags:
+        - Key: Name
+          Value: !Ref AWS::StackName
+
   SnsHandlerFunction:
     Type: AWS::Lambda::Function
     Properties:
+      Runtime: nodejs12.x
       Code:
+        S3Bucket: !Ref LambdaCodeBucket
+        S3Key: !Ref LambdaCodeKey
+      FunctionName: HandleSns
+      Handler: lambda.handleSns
+      Role: !GetAtt SnsHandlerRole.Arn
+      Timeout: 900
+      Tags:
+        - Key: Name
+          Value: !Ref AWS::StackName
 
 Outputs:
   InstanceEndpoint1:
