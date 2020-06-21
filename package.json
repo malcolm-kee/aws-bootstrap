@@ -7,7 +7,8 @@
     "start": "node ./node_modules/pm2/bin/pm2 start ./server.js --name hello_aws --log ../logs/app.log ",
     "stop": "node ./node_modules/pm2/bin/pm2 stop hello_aws",
     "build": "echo 'Building...'",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build:lambda": "tsc"
   },
   "keywords": [
     "aws",
@@ -19,5 +20,11 @@
     "aws-sdk": "^2.698.0",
     "node-fetch": "^2.6.0",
     "pm2": "^4.4.0"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.56",
+    "@types/aws-sdk": "^2.7.0",
+    "@types/node": "^12.12.47",
+    "typescript": "^3.9.5"
   }
 }

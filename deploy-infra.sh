@@ -14,6 +14,9 @@ AWS_ACCOUNT_ID=`aws sts get-caller-identity --profile awsbootstrap --query Accou
 CODEPIPELINE_BUCKET="$STACK_NAME-$REGION-codepipeline-$AWS_ACCOUNT_ID"
 TEXTRACT_BUCKET="$STACK_NAME-$REGION-textract-$AWS_ACCOUNT_ID"
 
+echo -e "\n\n=====================Building Lambda======================="
+npm run build:lambda;
+
 echo -e "\n\n=====================Deploying setup.yml===================="
 aws cloudformation deploy \
     --region $REGION \

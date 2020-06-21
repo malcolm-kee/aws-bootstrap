@@ -43,16 +43,16 @@ Resources:
           FromPort: 22
           ToPort: 22
           CidrIp: 0.0.0.0/0
-      
+
       Tags:
         - Key: Name
           Value: !Ref AWS::StackName
 
   DeploymentRole:
-    Type: "AWS::IAM::Role"
+    Type: 'AWS::IAM::Role'
     Properties:
       AssumeRolePolicyDocument:
-        Version: "2012-10-17"
+        Version: '2012-10-17'
         Statement:
           Effect: Allow
           Principal:
@@ -169,18 +169,19 @@ Resources:
       RegisterWithThirdParty: true
 
   InstanceRole:
-    Type: "AWS::IAM::Role"
+    Type: 'AWS::IAM::Role'
     Properties:
       AssumeRolePolicyDocument:
-        Version: "2012-10-17"
+        Version: '2012-10-17'
         Statement:
           Effect: Allow
           Principal:
             Service:
-              - "ec2.amazonaws.com"
+              - 'ec2.amazonaws.com'
           Action: sts:AssumeRole
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/CloudWatchFullAccess
+        - arn:aws:iam::aws:policy/AmazonSNSFullAccess
         - arn:aws:iam::aws:policy/service-role/AmazonEC2RoleForAWSCodeDeploy
       Policies:
         - PolicyName: ec2DescribeTags
@@ -209,7 +210,7 @@ Resources:
           Value: !Ref AWS::StackName
 
   InstanceProfile:
-    Type: "AWS::IAM::InstanceProfile"
+    Type: 'AWS::IAM::InstanceProfile'
     Properties:
       Roles:
         - Ref: InstanceRole
@@ -225,12 +226,12 @@ Resources:
               jq: []
           files:
             /home/ec2-user/install:
-              source: !Sub "https://aws-codedeploy-${AWS::Region}.s3.amazonaws.com/latest/install"
-              mode: "000755"
+              source: !Sub 'https://aws-codedeploy-${AWS::Region}.s3.amazonaws.com/latest/install'
+              mode: '000755'
           commands:
             00-install-cd-agent:
-              command: "./install auto"
-              cwd: "/home/ec2-user/"
+              command: './install auto'
+              cwd: '/home/ec2-user/'
     Properties:
       LaunchTemplateName: !Sub 'LaunchTemplate_${AWS::StackName}'
       LaunchTemplateData:
@@ -331,27 +332,27 @@ Resources:
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: !Ref VPC
-      AvailabilityZone: !Select [ 0, !GetAZs '' ]
+      AvailabilityZone: !Select [0, !GetAZs '']
       CidrBlock: 10.0.0.0/18
       MapPublicIpOnLaunch: true
       Tags:
         - Key: Name
           Value: !Ref AWS::StackName
         - Key: AZ
-          Value: !Select [ 0, !GetAZs '' ]
+          Value: !Select [0, !GetAZs '']
 
   SubnetAZ2:
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: !Ref VPC
-      AvailabilityZone: !Select [ 1, !GetAZs '' ]
+      AvailabilityZone: !Select [1, !GetAZs '']
       CidrBlock: 10.0.64.0/18
       MapPublicIpOnLaunch: true
       Tags:
         - Key: Name
           Value: !Ref AWS::StackName
         - Key: AZ
-          Value: !Select [ 1, !GetAZs '' ]
+          Value: !Select [1, !GetAZs '']
 
   InternetGateway:
     Type: AWS::EC2::InternetGateway
@@ -445,25 +446,30 @@ Resources:
           KeyType: HASH
       TableName: AnalysisTable
       ProvisionedThroughput:
-        ReadCapacityUnits: 10
-        WriteCapacityUnits: 10
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
       Tags:
         - Key: Name
           Value: !Ref AWS::StackName
 
+  SnsHandlerFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+
 Outputs:
   InstanceEndpoint1:
     Description: The DNS name for the created instance
-    Value: !Sub "http://${Instance.PublicDnsName}:8080"
+    Value: !Sub 'http://${Instance.PublicDnsName}:8080'
     Export:
       Name: InstanceEndpoint1
   InstanceEndpoint2:
     Description: The DNS name for the created instance
-    Value: !Sub "http://${Instance2.PublicDnsName}:8080"
+    Value: !Sub 'http://${Instance2.PublicDnsName}:8080'
     Export:
       Name: InstanceEndpoint2
   LBEndpoint:
     Description: The DNS name for the LB
-    Value: !Sub "http://${LoadBalancer.DNSName}:80"
+    Value: !Sub 'http://${LoadBalancer.DNSName}:80'
     Export:
       Name: LBEndpoint
