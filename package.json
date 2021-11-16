@@ -17,7 +17,7 @@
   "author": "Malcolm Kee",
   "license": "ISC",
   "dependencies": {
-    "aws-sdk": "^2.698.0",
+    "aws-sdk": "^2.814.0",
     "node-fetch": "^2.6.0",
     "pm2": "^4.4.0"
   },
